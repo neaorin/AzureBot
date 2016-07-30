@@ -1,47 +1,32 @@
 {
   "luis_schema_version": "1.3.0",
-  "name": "AzureBot",
+  "name": "SorinAzureBot",
   "desc": "A bot that can interact with Azure",
   "culture": "en-us",
   "intents": [
     {
-      "name": "CurrentSubscription"
-    },
-    {
-      "name": "ShutdownVm"
-    },
-    {
-      "name": "ShowJobOutput"
+      "name": "None"
     },
     {
       "name": "ListAutomationAccounts"
     },
     {
-      "name": "StatusJob"
-    },
-    {
-      "name": "ShutdownAllVms"
-    },
-    {
-      "name": "StopAllVms"
-    },
-    {
-      "name": "StartVm"
-    },
-    {
-      "name": "ListRunbooks"
-    },
-    {
-      "name": "ListVms"
+      "name": "Logout"
     },
     {
       "name": "StartAllVms"
     },
     {
-      "name": "None"
+      "name": "ShowJobOutput"
     },
     {
-      "name": "StopVm"
+      "name": "ListSecurityIssues"
+    },
+    {
+      "name": "CurrentSubscription"
+    },
+    {
+      "name": "FixSecurityIssue"
     },
     {
       "name": "RunRunbook"
@@ -50,44 +35,109 @@
       "name": "UseSubscription"
     },
     {
+      "name": "ListRunbooks"
+    },
+    {
+      "name": "ShutdownVm"
+    },
+    {
       "name": "Help"
+    },
+    {
+      "name": "ShutdownAllVms"
+    },
+    {
+      "name": "StopVm"
     },
     {
       "name": "ShowRunbookDescription"
     },
     {
-      "name": "Logout"
+      "name": "ListVms"
+    },
+    {
+      "name": "StartVm"
     },
     {
       "name": "ListSubscriptions"
+    },
+    {
+      "name": "StopAllVms"
     }
   ],
   "entities": [
-    {
-      "name": "Runbook"
-    },
-    {
-      "name": "VirtualMachine"
-    },
-    {
-      "name": "ResourceGroup"
-    },
-    {
-      "name": "Subscription"
-    },
     {
       "name": "Job"
     },
     {
       "name": "AutomationAccount"
+    },
+    {
+      "name": "Runbook"
+    },
+    {
+      "name": "ResourceGroup"
+    },
+    {
+      "name": "VirtualMachine"
+    },
+    {
+      "name": "Subscription"
+    },
+    {
+      "name": "SecurityIssue"
     }
   ],
-  "composites": [ ],
+  "composites": [],
   "bing_entities": [
     "ordinal",
     "number"
   ],
   "actions": [
+    {
+      "actionName": "UseSubscription",
+      "intentName": "UseSubscription",
+      "actionParameters": [
+        {
+          "parameterName": "subscriptionName",
+          "entityName": "Subscription",
+          "required": false
+        }
+      ]
+    },
+    {
+      "actionName": "StartVm",
+      "intentName": "StartVm",
+      "actionParameters": [
+        {
+          "parameterName": "vmName",
+          "entityName": "VirtualMachine",
+          "required": false
+        }
+      ]
+    },
+    {
+      "actionName": "FixSecurityIssue",
+      "intentName": "FixSecurityIssue",
+      "actionParameters": [
+        {
+          "parameterName": "issue",
+          "entityName": "SecurityIssue",
+          "required": true
+        }
+      ]
+    },
+    {
+      "actionName": "ShowRunbookDescription",
+      "intentName": "ShowRunbookDescription",
+      "actionParameters": [
+        {
+          "parameterName": "runbookName",
+          "entityName": "Runbook",
+          "required": false
+        }
+      ]
+    },
     {
       "actionName": "RunRunbook",
       "intentName": "RunRunbook",
@@ -105,8 +155,8 @@
       ]
     },
     {
-      "actionName": "StartVm",
-      "intentName": "StartVm",
+      "actionName": "StopVm",
+      "intentName": "StopVm",
       "actionParameters": [
         {
           "parameterName": "vmName",
@@ -114,44 +164,6 @@
           "required": false
         }
       ]
-    },
-    {
-      "actionName": "ShowRunbookDescription",
-      "intentName": "ShowRunbookDescription",
-      "actionParameters": [
-        {
-          "parameterName": "runbookName",
-          "entityName": "Runbook",
-          "required": false
-        }
-      ]
-    },
-    {
-      "actionName": "UseSubscription",
-      "intentName": "UseSubscription",
-      "actionParameters": [
-        {
-          "parameterName": "subscriptionName",
-          "entityName": "Subscription",
-          "required": false
-        }
-      ]
-    },
-    {
-      "actionName": "ShutdownVm",
-      "intentName": "ShutdownVm",
-      "actionParameters": [
-        {
-          "parameterName": "vmName",
-          "entityName": "VirtualMachine",
-          "required": false
-        }
-      ]
-    },
-    {
-      "actionName": "StatusJob",
-      "intentName": "StatusJob",
-      "actionParameters": [ ]
     },
     {
       "actionName": "ShowJobOutput",
@@ -165,8 +177,8 @@
       ]
     },
     {
-      "actionName": "StopVm",
-      "intentName": "StopVm",
+      "actionName": "ShutdownVm",
+      "intentName": "ShutdownVm",
       "actionParameters": [
         {
           "parameterName": "vmName",
@@ -214,7 +226,7 @@
       "activated": true
     }
   ],
-  "regex_features": [ ],
+  "regex_features": [],
   "utterances": [
     {
       "text": "stop virtual machine pilea-vm",
@@ -228,6 +240,21 @@
       ]
     },
     {
+      "text": "show me the status of a job",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "list vm",
+      "intent": "ListVms",
+      "entities": []
+    },
+    {
+      "text": "stop all virtual machines",
+      "intent": "StopAllVms",
+      "entities": []
+    },
+    {
       "text": "stop server01 vm",
       "intent": "StopVm",
       "entities": [
@@ -239,39 +266,24 @@
       ]
     },
     {
-      "text": "list vm",
-      "intent": "ListVms",
-      "entities": [ ]
-    },
-    {
-      "text": "show me the status of a job",
-      "intent": "StatusJob",
-      "entities": [ ]
-    },
-    {
       "text": "start all my vms",
       "intent": "StartAllVms",
-      "entities": [ ]
+      "entities": []
     },
     {
-      "text": "stop all virtual machines",
-      "intent": "StopAllVms",
-      "entities": [ ]
+      "text": "job status",
+      "intent": "None",
+      "entities": []
     },
     {
       "text": "list my automation accounts",
       "intent": "ListAutomationAccounts",
-      "entities": [ ]
-    },
-    {
-      "text": "job status",
-      "intent": "StatusJob",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "show all subscriptions",
       "intent": "ListSubscriptions",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start vm myserver",
@@ -318,16 +330,6 @@
       ]
     },
     {
-      "text": "show vms",
-      "intent": "ListVms",
-      "entities": [ ]
-    },
-    {
-      "text": "list automation accounts",
-      "intent": "ListAutomationAccounts",
-      "entities": [ ]
-    },
-    {
       "text": "start server02 virtual machine",
       "intent": "StartVm",
       "entities": [
@@ -337,6 +339,16 @@
           "endPos": 1
         }
       ]
+    },
+    {
+      "text": "show vms",
+      "intent": "ListVms",
+      "entities": []
+    },
+    {
+      "text": "list automation accounts",
+      "intent": "ListAutomationAccounts",
+      "entities": []
     },
     {
       "text": "start run book cleanup-demos-msdn100",
@@ -374,22 +386,22 @@
     {
       "text": "start all my virtual machines",
       "intent": "StartAllVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "list the vms",
       "intent": "ListVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "test",
       "intent": "None",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start all virtual machines",
       "intent": "StartAllVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "stop vm cloudsvr",
@@ -399,17 +411,6 @@
           "entity": "VirtualMachine",
           "startPos": 2,
           "endPos": 2
-        }
-      ]
-    },
-    {
-      "text": "start run book restore-azuredb",
-      "intent": "RunRunbook",
-      "entities": [
-        {
-          "entity": "Runbook",
-          "startPos": 3,
-          "endPos": 5
         }
       ]
     },
@@ -425,9 +426,15 @@
       ]
     },
     {
-      "text": "list subscriptions",
-      "intent": "ListSubscriptions",
-      "entities": [ ]
+      "text": "start run book restore-azuredb",
+      "intent": "RunRunbook",
+      "entities": [
+        {
+          "entity": "Runbook",
+          "startPos": 3,
+          "endPos": 5
+        }
+      ]
     },
     {
       "text": "start pilea-qa vm",
@@ -454,17 +461,12 @@
     {
       "text": "list the virtual machines",
       "intent": "ListVms",
-      "entities": [ ]
-    },
-    {
-      "text": "list my subs",
-      "intent": "ListSubscriptions",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "show subscriptions",
       "intent": "ListSubscriptions",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start runbook restore-resourcegroups",
@@ -478,20 +480,14 @@
       ]
     },
     {
-      "text": "hi",
-      "intent": "None",
-      "entities": [ ]
+      "text": "list subscriptions",
+      "intent": "ListSubscriptions",
+      "entities": []
     },
     {
-      "text": "start server01 vm",
-      "intent": "StartVm",
-      "entities": [
-        {
-          "entity": "VirtualMachine",
-          "startPos": 1,
-          "endPos": 1
-        }
-      ]
+      "text": "list my subs",
+      "intent": "ListSubscriptions",
+      "entities": []
     },
     {
       "text": "start vm cloudsvr",
@@ -516,13 +512,13 @@
       ]
     },
     {
-      "text": "start runbook remove-resourcegroups",
-      "intent": "RunRunbook",
+      "text": "start server01 vm",
+      "intent": "StartVm",
       "entities": [
         {
-          "entity": "Runbook",
-          "startPos": 2,
-          "endPos": 4
+          "entity": "VirtualMachine",
+          "startPos": 1,
+          "endPos": 1
         }
       ]
     },
@@ -540,12 +536,23 @@
     {
       "text": "show me the subscriptions",
       "intent": "ListSubscriptions",
-      "entities": [ ]
+      "entities": []
+    },
+    {
+      "text": "start runbook remove-resourcegroups",
+      "intent": "RunRunbook",
+      "entities": [
+        {
+          "entity": "Runbook",
+          "startPos": 2,
+          "endPos": 4
+        }
+      ]
     },
     {
       "text": "hello",
       "intent": "None",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "shutdown vm 1234",
@@ -561,7 +568,12 @@
     {
       "text": "show me all virtual machines",
       "intent": "ListVms",
-      "entities": [ ]
+      "entities": []
+    },
+    {
+      "text": "delete vm",
+      "intent": "None",
+      "entities": []
     },
     {
       "text": "start remove-resourcegroups runbook",
@@ -575,11 +587,6 @@
       ]
     },
     {
-      "text": "delete vm",
-      "intent": "None",
-      "entities": [ ]
-    },
-    {
       "text": "stop the pilea-vm vm",
       "intent": "StopVm",
       "entities": [
@@ -591,17 +598,6 @@
       ]
     },
     {
-      "text": "list job1 output",
-      "intent": "ShowJobOutput",
-      "entities": [
-        {
-          "entity": "Job",
-          "startPos": 1,
-          "endPos": 1
-        }
-      ]
-    },
-    {
       "text": "choose the falkfajsfk subscription",
       "intent": "UseSubscription",
       "entities": [
@@ -609,6 +605,17 @@
           "entity": "Subscription",
           "startPos": 2,
           "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "list job1 output",
+      "intent": "ShowJobOutput",
+      "entities": [
+        {
+          "entity": "Job",
+          "startPos": 1,
+          "endPos": 1
         }
       ]
     },
@@ -662,17 +669,6 @@
       ]
     },
     {
-      "text": "stop the cloudsvr vm",
-      "intent": "StopVm",
-      "entities": [
-        {
-          "entity": "VirtualMachine",
-          "startPos": 2,
-          "endPos": 2
-        }
-      ]
-    },
-    {
       "text": "start the cloudsvr vm",
       "intent": "StartVm",
       "entities": [
@@ -684,9 +680,20 @@
       ]
     },
     {
+      "text": "stop the cloudsvr vm",
+      "intent": "StopVm",
+      "entities": [
+        {
+          "entity": "VirtualMachine",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
       "text": "remove vm",
       "intent": "None",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "select subscription onetwo",
@@ -744,6 +751,16 @@
       ]
     },
     {
+      "text": "hi",
+      "intent": "None",
+      "entities": []
+    },
+    {
+      "text": "start runbook",
+      "intent": "RunRunbook",
+      "entities": []
+    },
+    {
       "text": "start runbook hello-world",
       "intent": "RunRunbook",
       "entities": [
@@ -753,11 +770,6 @@
           "endPos": 4
         }
       ]
-    },
-    {
-      "text": "start runbook",
-      "intent": "RunRunbook",
-      "entities": [ ]
     },
     {
       "text": "stop the server01 vm",
@@ -773,12 +785,12 @@
     {
       "text": "list all vms",
       "intent": "ListVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "shutdown vm 12345",
       "intent": "ShutdownVm",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "show runbook psrunbook description",
@@ -805,18 +817,7 @@
     {
       "text": "start all vms",
       "intent": "StartAllVms",
-      "entities": [ ]
-    },
-    {
-      "text": "stop the pilea vm",
-      "intent": "StopVm",
-      "entities": [
-        {
-          "entity": "VirtualMachine",
-          "startPos": 2,
-          "endPos": 2
-        }
-      ]
+      "entities": []
     },
     {
       "text": "choose subscription qa-internal",
@@ -830,9 +831,15 @@
       ]
     },
     {
-      "text": "start run book",
-      "intent": "RunRunbook",
-      "entities": [ ]
+      "text": "stop the pilea vm",
+      "intent": "StopVm",
+      "entities": [
+        {
+          "entity": "VirtualMachine",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
     },
     {
       "text": "select the develop01 subscription",
@@ -857,25 +864,19 @@
       ]
     },
     {
-      "text": "switch subscription to powerbi pre-prod",
-      "intent": "UseSubscription",
-      "entities": [
-        {
-          "entity": "Subscription",
-          "startPos": 3,
-          "endPos": 6
-        }
-      ]
-    },
-    {
       "text": "stop vm",
       "intent": "StopVm",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "shutdown virtual machine",
       "intent": "ShutdownVm",
-      "entities": [ ]
+      "entities": []
+    },
+    {
+      "text": "start run book",
+      "intent": "RunRunbook",
+      "entities": []
     },
     {
       "text": "start the pilea vm",
@@ -896,6 +897,17 @@
           "entity": "Subscription",
           "startPos": 2,
           "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "switch subscription to powerbi pre-prod",
+      "intent": "UseSubscription",
+      "entities": [
+        {
+          "entity": "Subscription",
+          "startPos": 3,
+          "endPos": 6
         }
       ]
     },
@@ -924,12 +936,7 @@
     {
       "text": "start vm",
       "intent": "StartVm",
-      "entities": [ ]
-    },
-    {
-      "text": "show me my runbooks",
-      "intent": "ListRunbooks",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "show runbook cleanup-demos-msdn100 description",
@@ -945,12 +952,17 @@
     {
       "text": "can you please list my virtual machines",
       "intent": "ListVms",
-      "entities": [ ]
+      "entities": []
+    },
+    {
+      "text": "show me my runbooks",
+      "intent": "ListRunbooks",
+      "entities": []
     },
     {
       "text": "delete virtual machine",
       "intent": "None",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "show job15 output",
@@ -1015,12 +1027,12 @@
     {
       "text": "shutdown vm",
       "intent": "ShutdownVm",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "what's my currrent subscription?",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "switch sub to acom pre-prod",
@@ -1036,23 +1048,12 @@
     {
       "text": "list my virtual machines",
       "intent": "ListVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "list vms",
       "intent": "ListVms",
-      "entities": [ ]
-    },
-    {
-      "text": "create virtual machine xysz",
-      "intent": "None",
-      "entities": [
-        {
-          "entity": "VirtualMachine",
-          "startPos": 3,
-          "endPos": 3
-        }
-      ]
+      "entities": []
     },
     {
       "text": "use the devtest subscription",
@@ -1068,23 +1069,12 @@
     {
       "text": "list runbooks",
       "intent": "ListRunbooks",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "which are my subscriptions?",
       "intent": "ListSubscriptions",
-      "entities": [ ]
-    },
-    {
-      "text": "change sub to devtest",
-      "intent": "UseSubscription",
-      "entities": [
-        {
-          "entity": "Subscription",
-          "startPos": 3,
-          "endPos": 3
-        }
-      ]
+      "entities": []
     },
     {
       "text": "use subscription pepep",
@@ -1098,17 +1088,18 @@
       ]
     },
     {
-      "text": "what is the subscription am i using",
-      "intent": "CurrentSubscription",
-      "entities": [ ]
+      "text": "create virtual machine xysz",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "VirtualMachine",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
     },
     {
-      "text": "list virtual machines",
-      "intent": "ListVms",
-      "entities": [ ]
-    },
-    {
-      "text": "change subscription to x2331atest",
+      "text": "change sub to devtest",
       "intent": "UseSubscription",
       "entities": [
         {
@@ -1119,13 +1110,23 @@
       ]
     },
     {
-      "text": "create vm xyzs",
-      "intent": "None",
+      "text": "list virtual machines",
+      "intent": "ListVms",
+      "entities": []
+    },
+    {
+      "text": "what is the subscription am i using",
+      "intent": "CurrentSubscription",
+      "entities": []
+    },
+    {
+      "text": "change subscription to x2331atest",
+      "intent": "UseSubscription",
       "entities": [
         {
-          "entity": "VirtualMachine",
-          "startPos": 2,
-          "endPos": 2
+          "entity": "Subscription",
+          "startPos": 3,
+          "endPos": 3
         }
       ]
     },
@@ -1141,11 +1142,6 @@
       ]
     },
     {
-      "text": "list my runbooks",
-      "intent": "ListRunbooks",
-      "entities": [ ]
-    },
-    {
       "text": "stop vm winservervm",
       "intent": "StopVm",
       "entities": [
@@ -1157,28 +1153,44 @@
       ]
     },
     {
-      "text": "change my subscription",
-      "intent": "UseSubscription",
-      "entities": [ ]
+      "text": "list my runbooks",
+      "intent": "ListRunbooks",
+      "entities": []
+    },
+    {
+      "text": "create vm xyzs",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "VirtualMachine",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
     },
     {
       "text": "what's the subscription am i using",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
+    },
+    {
+      "text": "change my subscription",
+      "intent": "UseSubscription",
+      "entities": []
     },
     {
       "text": "logoff",
       "intent": "Logout",
-      "entities": [ ]
+      "entities": []
     },
     {
-      "text": "show job1 output",
-      "intent": "ShowJobOutput",
+      "text": "start virtual machine newserver01",
+      "intent": "StartVm",
       "entities": [
         {
-          "entity": "Job",
-          "startPos": 1,
-          "endPos": 1
+          "entity": "VirtualMachine",
+          "startPos": 3,
+          "endPos": 3
         }
       ]
     },
@@ -1199,13 +1211,13 @@
       ]
     },
     {
-      "text": "start virtual machine newserver01",
-      "intent": "StartVm",
+      "text": "show job1 output",
+      "intent": "ShowJobOutput",
       "entities": [
         {
-          "entity": "VirtualMachine",
-          "startPos": 3,
-          "endPos": 3
+          "entity": "Job",
+          "startPos": 1,
+          "endPos": 1
         }
       ]
     },
@@ -1237,17 +1249,6 @@
       ]
     },
     {
-      "text": "remove vm xyasda",
-      "intent": "None",
-      "entities": [
-        {
-          "entity": "VirtualMachine",
-          "startPos": 2,
-          "endPos": 2
-        }
-      ]
-    },
-    {
       "text": "use the xxx subscription",
       "intent": "UseSubscription",
       "entities": [
@@ -1257,6 +1258,11 @@
           "endPos": 2
         }
       ]
+    },
+    {
+      "text": "user subscription 5",
+      "intent": "UseSubscription",
+      "entities": []
     },
     {
       "text": "use subscription q-internal",
@@ -1270,30 +1276,25 @@
       ]
     },
     {
-      "text": "user subscription 5",
-      "intent": "UseSubscription",
-      "entities": [ ]
-    },
-    {
-      "text": "remove virtual machine xxxx",
+      "text": "remove vm xyasda",
       "intent": "None",
       "entities": [
         {
           "entity": "VirtualMachine",
-          "startPos": 3,
-          "endPos": 3
+          "startPos": 2,
+          "endPos": 2
         }
       ]
     },
     {
       "text": "create vm",
       "intent": "None",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "show runbooks",
       "intent": "ListRunbooks",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "stop virtual machine 12345",
@@ -1309,12 +1310,12 @@
     {
       "text": "what is the subscription am i using?",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "use subscription",
       "intent": "UseSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start vm server01",
@@ -1344,11 +1345,6 @@
       ]
     },
     {
-      "text": "5",
-      "intent": "None",
-      "entities": [ ]
-    },
-    {
       "text": "start runbook psrunbook from testez automation account",
       "intent": "RunRunbook",
       "entities": [
@@ -1365,9 +1361,15 @@
       ]
     },
     {
-      "text": "what's my current subscription",
-      "intent": "CurrentSubscription",
-      "entities": [ ]
+      "text": "remove virtual machine xxxx",
+      "intent": "None",
+      "entities": [
+        {
+          "entity": "VirtualMachine",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
     },
     {
       "text": "shutdown server05 vm",
@@ -1379,6 +1381,11 @@
           "endPos": 1
         }
       ]
+    },
+    {
+      "text": "what's my current subscription",
+      "intent": "CurrentSubscription",
+      "entities": []
     },
     {
       "text": "use sub qadev1",
@@ -1394,7 +1401,7 @@
     {
       "text": "what's the subscription am i using?",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "switch subscription to qaprod",
@@ -1410,7 +1417,7 @@
     {
       "text": "list subs",
       "intent": "ListSubscriptions",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start vm encta02",
@@ -1426,7 +1433,7 @@
     {
       "text": "sign out",
       "intent": "Logout",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "stop virtual machine zaraza",
@@ -1442,7 +1449,7 @@
     {
       "text": "start the third one",
       "intent": "StartVm",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "stop qa-dev-01 virtual machine",
@@ -1454,11 +1461,6 @@
           "endPos": 5
         }
       ]
-    },
-    {
-      "text": "delete vm xxxx",
-      "intent": "None",
-      "entities": [ ]
     },
     {
       "text": "shutdown dev012qa1 virtual machine",
@@ -1483,14 +1485,14 @@
       ]
     },
     {
-      "text": "remove vm xxxx",
+      "text": "5",
       "intent": "None",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "what subscription am i using",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "switch sub to dev-internal2",
@@ -1502,6 +1504,11 @@
           "endPos": 5
         }
       ]
+    },
+    {
+      "text": "delete vm xxxx",
+      "intent": "None",
+      "entities": []
     },
     {
       "text": "run runbook hello-world from autdevqa automation account",
@@ -1520,6 +1527,11 @@
       ]
     },
     {
+      "text": "remove vm xxxx",
+      "intent": "None",
+      "entities": []
+    },
+    {
       "text": "start runbook psrunbook from non-existent-account automation account",
       "intent": "RunRunbook",
       "entities": [
@@ -1536,6 +1548,11 @@
       ]
     },
     {
+      "text": "my jobs",
+      "intent": "None",
+      "entities": []
+    },
+    {
       "text": "change to subscription ximbus deployment test",
       "intent": "UseSubscription",
       "entities": [
@@ -1547,14 +1564,9 @@
       ]
     },
     {
-      "text": "my jobs",
-      "intent": "StatusJob",
-      "entities": [ ]
-    },
-    {
       "text": "current subscription",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "use subscription manifold-test",
@@ -1570,12 +1582,12 @@
     {
       "text": "what are the virtual machines?",
       "intent": "ListVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "enumerate vms",
       "intent": "ListVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start the alalala runbook",
@@ -1590,8 +1602,8 @@
     },
     {
       "text": "show me the job status",
-      "intent": "StatusJob",
-      "entities": [ ]
+      "intent": "None",
+      "entities": []
     },
     {
       "text": "switch to the dev-test subscription",
@@ -1649,11 +1661,6 @@
       ]
     },
     {
-      "text": "what's my current subscription?",
-      "intent": "CurrentSubscription",
-      "entities": [ ]
-    },
-    {
       "text": "select the acom-test subscription",
       "intent": "UseSubscription",
       "entities": [
@@ -1663,6 +1670,11 @@
           "endPos": 4
         }
       ]
+    },
+    {
+      "text": "what's my current subscription?",
+      "intent": "CurrentSubscription",
+      "entities": []
     },
     {
       "text": "start runbook aadscdemo-get-wunderlistuser from stefstrauto automation account",
@@ -1683,7 +1695,7 @@
     {
       "text": "help me",
       "intent": "Help",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "run the configurevm runbook",
@@ -1710,7 +1722,7 @@
     {
       "text": "logout",
       "intent": "Logout",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start virtual machine kajakakxd",
@@ -1724,11 +1736,6 @@
       ]
     },
     {
-      "text": "signout",
-      "intent": "Logout",
-      "entities": [ ]
-    },
-    {
       "text": "shutdown pilea-dev vm",
       "intent": "ShutdownVm",
       "entities": [
@@ -1740,9 +1747,14 @@
       ]
     },
     {
+      "text": "signout",
+      "intent": "Logout",
+      "entities": []
+    },
+    {
       "text": "run runbook",
       "intent": "RunRunbook",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "use the staging subscription",
@@ -1791,22 +1803,22 @@
     {
       "text": "log off",
       "intent": "Logout",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "what is my current subscription",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "use the second one",
       "intent": "UseSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "stop vm x0324aa",
       "intent": "StopVm",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "stop server03 virtual machine",
@@ -1829,11 +1841,6 @@
           "endPos": 3
         }
       ]
-    },
-    {
-      "text": "log out",
-      "intent": "Logout",
-      "entities": [ ]
     },
     {
       "text": "shutdown x34-prod virtual machine",
@@ -1860,7 +1867,12 @@
     {
       "text": "what's subscription am i using?",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
+    },
+    {
+      "text": "log out",
+      "intent": "Logout",
+      "entities": []
     },
     {
       "text": "select subscription 12345",
@@ -1908,19 +1920,8 @@
     },
     {
       "text": "give me the status of a job",
-      "intent": "StatusJob",
-      "entities": [ ]
-    },
-    {
-      "text": "stop vm integration-server",
-      "intent": "StopVm",
-      "entities": [
-        {
-          "entity": "VirtualMachine",
-          "startPos": 2,
-          "endPos": 4
-        }
-      ]
+      "intent": "None",
+      "entities": []
     },
     {
       "text": "select subscription wenham-qa",
@@ -1928,6 +1929,17 @@
       "entities": [
         {
           "entity": "Subscription",
+          "startPos": 2,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "stop vm integration-server",
+      "intent": "StopVm",
+      "entities": [
+        {
+          "entity": "VirtualMachine",
           "startPos": 2,
           "endPos": 4
         }
@@ -1980,7 +1992,7 @@
     {
       "text": "what is my current subscription?",
       "intent": "CurrentSubscription",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "use subscription devdev",
@@ -1995,23 +2007,12 @@
     },
     {
       "text": "status job",
-      "intent": "StatusJob",
-      "entities": [ ]
+      "intent": "None",
+      "entities": []
     },
     {
       "text": "start the yyyy virtual machine",
       "intent": "StartVm",
-      "entities": [
-        {
-          "entity": "VirtualMachine",
-          "startPos": 2,
-          "endPos": 2
-        }
-      ]
-    },
-    {
-      "text": "stop vm osisksks214",
-      "intent": "StopVm",
       "entities": [
         {
           "entity": "VirtualMachine",
@@ -2043,6 +2044,17 @@
       ]
     },
     {
+      "text": "stop vm osisksks214",
+      "intent": "StopVm",
+      "entities": [
+        {
+          "entity": "VirtualMachine",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
       "text": "use the staging-01 subscription",
       "intent": "UseSubscription",
       "entities": [
@@ -2054,17 +2066,6 @@
       ]
     },
     {
-      "text": "change to subscription media service private prod",
-      "intent": "UseSubscription",
-      "entities": [
-        {
-          "entity": "Subscription",
-          "startPos": 3,
-          "endPos": 6
-        }
-      ]
-    },
-    {
       "text": "use subscription pepe",
       "intent": "UseSubscription",
       "entities": [
@@ -2072,6 +2073,17 @@
           "entity": "Subscription",
           "startPos": 2,
           "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "change to subscription media service private prod",
+      "intent": "UseSubscription",
+      "entities": [
+        {
+          "entity": "Subscription",
+          "startPos": 3,
+          "endPos": 6
         }
       ]
     },
@@ -2099,7 +2111,7 @@
     },
     {
       "text": "runbook status",
-      "intent": "StatusJob",
+      "intent": "None",
       "entities": [
         {
           "entity": "Runbook",
@@ -2120,39 +2132,29 @@
       ]
     },
     {
-      "text": "help",
-      "intent": "Help",
-      "entities": [ ]
-    },
-    {
       "text": "shutdown all virtual machines",
       "intent": "ShutdownAllVms",
-      "entities": [ ]
+      "entities": []
+    },
+    {
+      "text": "help",
+      "intent": "Help",
+      "entities": []
     },
     {
       "text": "stop all vms",
       "intent": "StopAllVms",
-      "entities": [ ]
-    },
-    {
-      "text": "stop all my virtual machines",
-      "intent": "StopAllVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "stop all my vms",
       "intent": "StopAllVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "shutdown all my virtual machines",
       "intent": "ShutdownAllVms",
-      "entities": [ ]
-    },
-    {
-      "text": "shutdown all my vms",
-      "intent": "ShutdownAllVms",
-      "entities": [ ]
+      "entities": []
     },
     {
       "text": "start runbook cleanup-all-my-resource-groups",
@@ -2164,6 +2166,16 @@
           "endPos": 10
         }
       ]
+    },
+    {
+      "text": "shutdown all my vms",
+      "intent": "ShutdownAllVms",
+      "entities": []
+    },
+    {
+      "text": "stop all my virtual machines",
+      "intent": "StopAllVms",
+      "entities": []
     },
     {
       "text": "start all vms from azurebot-development resource group",
@@ -2307,6 +2319,27 @@
           "endPos": 8
         }
       ]
+    },
+    {
+      "text": "list security alerts",
+      "intent": "ListSecurityIssues",
+      "entities": [
+        {
+          "entity": "SecurityIssue",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "any security issues?",
+      "intent": "ListSecurityIssues",
+      "entities": []
+    },
+    {
+      "text": "fix the security issue",
+      "intent": "FixSecurityIssue",
+      "entities": []
     }
   ]
 }
