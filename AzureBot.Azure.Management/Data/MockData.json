@@ -65,7 +65,7 @@
     {
       "Name": "mydriving",
       "SubscriptionId": "1356C20F-EB86-438C-9945-BC78F60BFD38"
-    }  
+    }
   ],
   "AutomationAccounts": [
     {
@@ -95,6 +95,29 @@
           "RunbookId": "22222222-802B-42CA-8EBC-BBBBBBBBBBBB"
         }
       ]
+    }
+  ],
+  "SecurityAlerts": [
+    {
+      "State": "Open",
+      "Severity": "High",
+      "Description": "Enable Auditing on SQL server XYZ",
+      "ReportedTime": "2016-07-23T00:00:00Z",
+      "AssociatedResourceId": ""
+    },
+    {
+      "State": "Open",
+      "Severity": "High",
+      "Description": "Enable Auditing on SQL server ABC",
+      "ReportedTime": "2016-07-23T00:00:00Z",
+      "AssociatedResourceId": ""
+    },
+    {
+      "State": "Open",
+      "Severity": "High",
+      "Description": "Enable Auditing on SQL server DEF",
+      "ReportedTime": "2016-07-23T00:00:00Z",
+      "AssociatedResourceId": ""
     }
   ]
 }

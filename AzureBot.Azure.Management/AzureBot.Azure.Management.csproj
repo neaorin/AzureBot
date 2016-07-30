@@ -38,6 +38,7 @@
     <Compile Include="Models\Runbook.cs" />
     <Compile Include="Models\RunbookJob.cs" />
     <Compile Include="Models\RunbookParameter.cs" />
+    <Compile Include="Models\SecurityTask.cs" />
     <Compile Include="Models\VirtualMachine.cs" />
     <Compile Include="Models\Subscription.cs" />
     <Compile Include="Models\VirtualMachinePowerState.cs" />
@@ -70,6 +71,10 @@
     </Reference>
     <Reference Include="Microsoft.Azure.Management.Compute, Version=9.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.Management.Compute.9.1.0\lib\net40\Microsoft.Azure.Management.Compute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.Management.Sql, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.Management.Sql.0.48.0-prerelease\lib\net40\Microsoft.Azure.Management.Sql.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Azure.ResourceManager, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">

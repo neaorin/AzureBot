@@ -75,5 +75,25 @@
         {
             context.PrivateConversationData.RemoveValue(ContextConstants.RunbookFormStateKey);
         }
+
+
+        public static SecurityTaskFormState GetSecurityTaskFormState(this IBotContext context)
+        {
+            SecurityTaskFormState securityTaskFormState;
+
+            context.PrivateConversationData.TryGetValue(ContextConstants.SecurityTasksKey, out securityTaskFormState);
+
+            return securityTaskFormState;
+        }
+
+        public static void StoreSecurityTaskFormState(this IBotContext context, SecurityTaskFormState securityTaskFormState)
+        {
+            context.PrivateConversationData.SetValue(ContextConstants.SecurityTasksKey, securityTaskFormState);
+        }
+
+        public static void CleanupSecurityTaskFormState(this IBotContext context)
+        {
+            context.PrivateConversationData.RemoveValue(ContextConstants.SecurityTasksKey);
+        }
     }
 }

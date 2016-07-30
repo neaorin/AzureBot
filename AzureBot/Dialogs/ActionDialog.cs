@@ -19,7 +19,7 @@
     using Microsoft.Bot.Builder.Luis.Models;
     using Microsoft.Bot.Connector;
     
-    [LuisModel("1b58a513-e98a-4a13-a5c4-f61ac6dc6c84", "0e64d2ae951547f692182b4ae74262cb")]
+    [LuisModel("1031487c-8b03-45d8-947e-cddc607c7292", "905a0f41c2334e6992b5ca1e8bce6375")]
     [Serializable]
     public class ActionDialog : LuisDialog<string>
     {
@@ -29,7 +29,7 @@
         [LuisIntent("None")]
         public async Task None(IDialogContext context, LuisResult result)
         {
-            string message = $"Sorry, I did not understand '{result.Query}'. Type 'help' if you need assistance.";
+            string message = $"I am sorry, I did not understand '{result?.Query ?? "you"}'. Type 'help' if you need assistance.";
 
             await context.PostAsync(message);
 
@@ -44,6 +44,7 @@
             message += $"* List, Start, Shutdown (power off your VM, still incurring compute charges), and Stop (deallocates your VM, no charges) your virtual machines\n";
             message += $"* List your automation accounts and your runbooks\n";
             message += $"* Start a runbook, get the description of a runbook, get the status and ouput of automation jobs\n";
+            message += $"* **View security incidents and fix them quickly**\n";
             message += $"* Logout to sign out from Azure\n\n";
             message += $"Please type **login** to interact with me for the first time.";
             
@@ -119,6 +120,9 @@
             while (!completionCondition(lastOperationStatus));
         }
 
+        //[LuisInten]("List Alerts")]
+        //{
+        //}
 
         [LuisIntent("ListSubscriptions")]
         public async Task ListSubscriptionsAsync(IDialogContext context, LuisResult result)
@@ -643,6 +647,47 @@
             context.Wait(this.MessageReceived);
         }
 
+        [LuisIntent("ListSecurityIssues")]
+        public async Task ListSecurityIssueAsync(IDialogContext context, LuisResult result)
+        {
+            var accessToken = await context.GetAccessToken(resourceId.Value);
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return;
+            }
+
+            var subscriptionId = context.GetSubscriptionId();
+
+            var securityAlerts = (await new AzureRepository().ListSecurityTasksAsync(accessToken, subscriptionId)).ToList();
+
+            if (securityAlerts.Any())
+            {
+                var securityAlertsText = securityAlerts
+                    .OrderByDescending(x => x.Severity)
+                    .Aggregate(
+                     string.Empty,
+                    (current, next) =>
+                    {
+                        return current += $"\n\r• {next}";
+                    });
+
+                await context.PostAsync($"Here are the outstanding security issues. Let me know if you want me to fix any.\r\n\r\n  {securityAlertsText}");
+            }
+            else
+            {
+                await context.PostAsync("There are no security issues. Yay!");
+            }
+
+            context.Wait(this.MessageReceived);
+        }
+
+        [LuisIntent("FixSecurityIssue")]
+        public async Task FixSecurityIssueAsync(IDialogContext context, LuisResult result)
+        {
+            await this.ProcessSecurityTaskActionAsync(context, result, this.FixSecurityTaskFormComplete);
+        }
+
+
         private async Task ResumeAfterAuth(IDialogContext context, IAwaitable<string> result)
         {
             var message = await result;
@@ -897,6 +942,40 @@
             }
         }
 
+
+        private async Task ProcessSecurityTaskActionAsync(
+            IDialogContext context,
+            LuisResult result,
+            ResumeAfter<SecurityTaskFormState> resume)
+        {
+            var accessToken = await context.GetAccessToken(resourceId.Value);
+            if (string.IsNullOrEmpty(accessToken))
+            {
+                return;
+            }
+
+            var subscriptionId = context.GetSubscriptionId();
+            var availableTasks = (await new AzureRepository().ListSecurityTasksAsync(accessToken, subscriptionId))
+                .Take(10)
+                .ToList();
+
+            if (availableTasks.Any())
+            {
+                // prompt the user to select a task from the list
+                var form = new FormDialog<SecurityTaskFormState>(
+                    new SecurityTaskFormState(availableTasks),
+                    EntityForms.BuildSecurityTaskForm,
+                    FormOptions.PromptInStart,
+                    result.Entities);
+
+                context.Call(form, resume);
+            }
+            else
+            {
+                context.Wait(this.MessageReceived);
+            }
+        }
+
         private async Task ProcessAllVirtualMachinesActionAsync(
            IDialogContext context,
            LuisResult result,
@@ -1020,6 +1099,24 @@
                 notifyLongRunningOperationHandler);
         }
 
+        private async Task FixSecurityTaskFormComplete(IDialogContext context, IAwaitable<SecurityTaskFormState> result)
+        {
+            Func<string, string> preMessageHandler = taskDesc => $"I'm going to {taskDesc}.";
+
+            Func<bool, string, string> notifyLongRunningOperationHandler = (operationStatus, taskDesc) =>
+            {
+                var statusMessage = operationStatus ? "Done! :)" : "I failed :(";
+                return statusMessage;
+            };
+
+            await this.ProcessFixSecurityTaskFormComplete(
+                context,
+                result,
+                new AzureRepository().FixSecurityTaskAsync,
+                preMessageHandler,
+                notifyLongRunningOperationHandler);
+        }
+
         private async Task ProcessVirtualMachineFormComplete(
             IDialogContext context,
             IAwaitable<VirtualMachineFormState> result,
@@ -1044,6 +1141,37 @@
                     .NotifyLongRunningOperation(context, notifyLongRunningOperationHandler, vm.Name);
             }
             catch (FormCanceledException<VirtualMachineFormState>)
+            {
+                await context.PostAsync("You have canceled the operation. What would you like to do next?");
+            }
+
+            context.Wait(this.MessageReceived);
+        }
+
+        private async Task ProcessFixSecurityTaskFormComplete(
+            IDialogContext context,
+            IAwaitable<SecurityTaskFormState> result,
+            Func<string, string, SecurityTask, Task<bool>> operationHandler,
+            Func<string, string> preMessageHandler,
+            Func<bool, string, string> notifyLongRunningOperationHandler)
+        {
+            try
+            {
+                var securityTaskFromState = await result;
+                var task = securityTaskFromState.SelectedTask;
+
+                await context.PostAsync(preMessageHandler(task.FullName));
+
+                var accessToken = await context.GetAccessToken(resourceId.Value);
+                if (string.IsNullOrEmpty(accessToken))
+                {
+                    return;
+                }
+
+                operationHandler(accessToken, context.GetSubscriptionId(), task)
+                    .NotifyLongRunningOperation(context, notifyLongRunningOperationHandler, task.FullName);
+            }
+            catch (FormCanceledException<SecurityTask>)
             {
                 await context.PostAsync("You have canceled the operation. What would you like to do next?");
             }
