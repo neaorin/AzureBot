@@ -14,6 +14,8 @@
 
     public class AzureRepository
     {
+        private Data.MockData MockData { get; } = new Data.MockData();
+
         public async Task<IEnumerable<Subscription>> ListSubscriptionsAsync(string accessToken)
         {
             var credentials = new TokenCredentials(accessToken);
@@ -238,6 +240,11 @@
 
                 return automationRunbookResult.Runbook.Properties.Description;
             }
+        }
+
+        public Task<IEnumerable<SecurityAlert>> ListSecurityAlertsAsync(string accessToken, string subscriptionId)
+        {
+            return Task.FromResult(MockData.SecurityAlerts.Distinct());
         }
 
         private static string GetResourceGroup(string id)

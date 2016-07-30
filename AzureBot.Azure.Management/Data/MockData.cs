@@ -22,6 +22,8 @@
 
         public AutomationAccount[] AutomationAccounts { get; set; }
 
+        public SecurityAlert[] SecurityAlerts { get; set; }
+
         public static IEnumerable<Subscription> GetSubscriptions()
         {
             return data.Subscriptions;
@@ -35,6 +37,11 @@
         public static IEnumerable<AutomationAccount> GetAutomationAccounts()
         {
             return data.AutomationAccounts;
+        }
+
+        public static IEnumerable<SecurityAlert> GetSecurityAlerts()
+        {
+            return data.SecurityAlerts;
         }
 
         public static string ReadAllText(string fileName)
