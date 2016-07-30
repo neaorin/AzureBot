@@ -19,7 +19,7 @@
     using Microsoft.Bot.Builder.Luis.Models;
     using Microsoft.Bot.Connector;
     
-    [LuisModel("1b58a513-e98a-4a13-a5c4-f61ac6dc6c84", "0e64d2ae951547f692182b4ae74262cb")]
+    [LuisModel("630e7035-eb70-472b-a68c-cbe8c94ecca0", "01775aef71784eb497947bdd4225a799")]
     [Serializable]
     public class ActionDialog : LuisDialog<string>
     {
@@ -119,6 +119,9 @@
             while (!completionCondition(lastOperationStatus));
         }
 
+        //[LuisInten]("List Alerts")]
+        //{
+        //}
 
         [LuisIntent("ListSubscriptions")]
         public async Task ListSubscriptionsAsync(IDialogContext context, LuisResult result)
