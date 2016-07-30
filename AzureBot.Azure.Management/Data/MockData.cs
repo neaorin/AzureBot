@@ -22,7 +22,7 @@
 
         public AutomationAccount[] AutomationAccounts { get; set; }
 
-        public SecurityAlert[] SecurityAlerts { get; set; }
+        public SecurityTask[] SecurityAlerts { get; set; }
 
         public static IEnumerable<Subscription> GetSubscriptions()
         {
@@ -39,7 +39,7 @@
             return data.AutomationAccounts;
         }
 
-        public static IEnumerable<SecurityAlert> GetSecurityAlerts()
+        public static IEnumerable<SecurityTask> GetSecurityAlerts()
         {
             return data.SecurityAlerts;
         }

@@ -12,12 +12,6 @@
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        //[HttpGet]
-        //public virtual async Task<HttpResponseMessage> Get()
-        //{
-        //    return new HttpResponseMessage(System}
-        //}
-
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it

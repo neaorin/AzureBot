@@ -7,5 +7,7 @@
         public const string RunbookFormStateKey = "runbookFormState";
 
         public const string AutomationJobsKey = "automationJobsBySubscription";
+
+        public const string SecurityTasksKey = "securityTasksBySubscription";
     }
 }

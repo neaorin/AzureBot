@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using Microsoft.Bot.Builder.FormFlow;
     using Microsoft.Bot.Builder.FormFlow.Advanced;
+    using Azure.Management.Models;
 
     public class EntityForms
     {
@@ -135,6 +136,27 @@
                 .Build();
         }
 
+        public static IForm<SecurityTaskFormState> BuildSecurityTaskForm()
+        {
+            return CreateCustomForm<SecurityTaskFormState>()
+                .Field(new FieldReflector<SecurityTaskFormState>(nameof(SecurityTaskFormState.TaskFullName))
+                    .SetType(null)
+                    .SetPrompt(PerLinePromptAttribute("Please select the security issue you want to fix: {||}"))
+                    .SetDefine((state, field) =>
+                    {
+                        foreach (var task in state.AvailableTasks)
+                        {
+                            if (task is AzureSqlDatabaseSecurityTask || task is AzureSqlServerSecurityTask)
+                                field.AddDescription(task.FullName, task.FullName)
+                                    .AddTerms(task.FullName, task.FullName);
+                        }
+
+                        return Task.FromResult(true);
+                    }))
+                .Confirm("Would you like to {TaskFullName}?")
+                .Build();
+        }
+
         private static IFormBuilder<T> CreateCustomForm<T>()
            where T : class
         {
@@ -156,7 +178,7 @@
         {
             return new PromptAttribute(pattern)
             {
-                ChoiceStyle = ChoiceStyleOptions.PerLine
+                ChoiceStyle = ChoiceStyleOptions.PerLine, 
             };
         }
     }

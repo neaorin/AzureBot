@@ -11,11 +11,13 @@
     using Models;
     using AzureModels = Microsoft.Azure.Management.Automation.Models;
     using TokenCredentials = Microsoft.Azure.TokenCloudCredentials;
+    using System.Net;
+    using Newtonsoft.Json;
+    using Microsoft.Azure.Management.Sql;
+    using Microsoft.Azure.Management.Sql.Models;
 
     public class AzureRepository
     {
-        private Data.MockData MockData { get; } = new Data.MockData();
-
         public async Task<IEnumerable<Subscription>> ListSubscriptionsAsync(string accessToken)
         {
             var credentials = new TokenCredentials(accessToken);
@@ -242,9 +244,108 @@
             }
         }
 
-        public Task<IEnumerable<SecurityAlert>> ListSecurityAlertsAsync(string accessToken, string subscriptionId)
+        public async Task<IEnumerable<SecurityTask>> ListSecurityTasksAsync(string accessToken, string subscriptionId)
         {
-            return Task.FromResult(MockData.SecurityAlerts.Distinct());
+            HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create($"https://management.azure.com/subscriptions/{subscriptionId}/providers/microsoft.Security/tasks?api-version=2015-06-01-preview");
+            webRequest.Headers.Add("Authorization", $"Bearer {accessToken}");
+            webRequest.Accept = "application/json";
+            WebResponse webResp = await webRequest.GetResponseAsync();
+            string responseText = String.Empty;
+            using (var reader = new System.IO.StreamReader(webResp.GetResponseStream()))
+            {
+                responseText = reader.ReadToEnd();
+            }
+
+            var tasks = new List<SecurityTask>();
+
+            dynamic obj = JsonConvert.DeserializeObject(responseText);
+            foreach (dynamic taskobj in obj.value)
+            {
+                dynamic secparams = taskobj?.properties?.securityTaskParameters;
+                SecurityTask task;
+                if (secparams?.databaseId != null)
+                {
+                    task = new AzureSqlDatabaseSecurityTask()
+                    {
+                        DatabaseId = secparams.databaseId,
+                        DatabaseName = secparams.databaseName,
+                        ServerName = secparams.serverName,
+                        Severity = SecurityTaskSeverity.High
+                    };
+                }
+                else if (secparams?.serverId != null)
+                    {
+                        task = new AzureSqlServerSecurityTask()
+                        {
+                            ServerId = secparams.serverId,
+                            ServerName = secparams.serverName,
+                            Severity = SecurityTaskSeverity.High
+                        };
+                    }
+                else
+                {
+                    task = new SecurityTask();
+                    task.Severity = SecurityTaskSeverity.Medium;
+                }
+
+                task.Created = Convert.ToDateTime(taskobj?.properties?.creationTimeUtc);
+                task.Name = secparams.name;              
+
+                tasks.Add(task);
+            }
+            return tasks;
+        }
+
+        public async Task<bool> FixSecurityTaskAsync(string accessToken, string subscriptionId, SecurityTask task)
+        {
+            var credentials = new TokenCredentials(subscriptionId, accessToken);
+
+            if (task is AzureSqlServerSecurityTask)
+            {
+                var dbTask = task as AzureSqlServerSecurityTask;
+                using (var sqlMgmtClient = new SqlManagementClient(credentials))
+                {
+                    var response = await sqlMgmtClient.BlobAuditing.CreateOrUpdateServerPolicyAsync(
+                        GetResourceGroup(dbTask.ServerId),
+                        dbTask.ServerName,
+                        new BlobAuditingCreateOrUpdateParameters()
+                        {
+                            Properties = new BlobAuditingProperties()
+                            {
+                                State = "Enabled",
+                                StorageAccountAccessKey = "K//uNZGisrS39ftOHlC1n571A3Ug5gNZx0kF9nkLRdFnHA4Yy5xsW/Y6i9LaliokwwKcPhRIg3uSGdAFmDiNpA==",
+                                StorageEndpoint = "https://hortonworkslab7987.blob.core.windows.net"
+                            }
+                        });
+
+                    return response.StatusCode == HttpStatusCode.OK;
+                }
+
+            }
+
+            else if (task is AzureSqlDatabaseSecurityTask)
+            {
+                var dbTask = task as AzureSqlDatabaseSecurityTask;
+                using (var sqlMgmtClient = new SqlManagementClient(credentials))
+                {
+                    var response = await sqlMgmtClient.BlobAuditing.CreateOrUpdateDatabasePolicyAsync(
+                        GetResourceGroup(dbTask.DatabaseId),
+                        dbTask.ServerName,
+                        dbTask.DatabaseName,
+                        new BlobAuditingCreateOrUpdateParameters()
+                        {
+                            Properties = new BlobAuditingProperties()
+                            {
+                                State = "Enabled"                                
+                            }
+                        });
+
+                    return response.StatusCode == HttpStatusCode.OK;
+                }
+
+            }
+
+            return false;
         }
 
         private static string GetResourceGroup(string id)
