@@ -312,9 +312,7 @@
                         {
                             Properties = new BlobAuditingProperties()
                             {
-                                State = "Enabled",
-                                StorageAccountAccessKey = "K//uNZGisrS39ftOHlC1n571A3Ug5gNZx0kF9nkLRdFnHA4Yy5xsW/Y6i9LaliokwwKcPhRIg3uSGdAFmDiNpA==",
-                                StorageEndpoint = "https://hortonworkslab7987.blob.core.windows.net"
+                                State = "Enabled"
                             }
                         });
 
